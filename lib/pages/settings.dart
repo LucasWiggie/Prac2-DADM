@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../providers/theme_provider.dart';
-import '../themes/theme_preferences.dart';
+import '../utils/theme_preferences.dart';
 
 class Settings extends StatelessWidget {
   const Settings({Key? key}) : super(key:key);
@@ -32,6 +33,14 @@ class Settings extends StatelessWidget {
                   Provider.of<ThemeProvider>(context, listen:false).setTheme(turnOn: _isSwitched);
                 });
               },
+          ),
+          ListTile( //para poder reiniciar las estadisticas
+            leading: Text("Borrar Datos"),
+            onTap: () async {
+              final prefs = await SharedPreferences.getInstance();
+              prefs.remove("stats"); //leer los datos y borrar las estadisticas
+              showDialog(context: context, builder: (context) => AlertDialog(title: Text("Estadísticas borradas", textAlign: TextAlign.center,),)); //texto de borrado
+            }
           )
         ]
       ),

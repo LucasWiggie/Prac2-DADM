@@ -3,9 +3,10 @@ import 'package:prac2_dadm_grupo_d/constants/answer_stages.dart';
 import 'package:prac2_dadm_grupo_d/data/keys_map.dart';
 
 import '../models/tile_model.dart';
+import '../stats_calculator.dart';
 
 class Controller extends ChangeNotifier {
-  bool checkLine = false, isBackOrEnter = false, gameWon = false;
+  bool checkLine = false, isBackOrEnter = false, gameWon = false, gameCompleted = false;
   String correctWord = "";
   int currentTile = 0; // lleva la cuenta de en qué casilla de la fila está el jugador
   int currentRow = 0; // lleva la cuenta de en qué fila está el jugador
@@ -57,6 +58,7 @@ class Controller extends ChangeNotifier {
         tilesEntered[i].answerStage = AnswerStage.correct;
         keysMap.update(tilesEntered[i].letter, (value) => AnswerStage.correct);
         gameWon = true;
+        gameCompleted = true; //juego termina si gana
       }
     } else { // si no ha acertado
       // Comprobamos qué letras sí ha acertado en su casilla correcta
@@ -105,6 +107,12 @@ class Controller extends ChangeNotifier {
   }
     currentRow++;
     checkLine = true;
+    if(currentRow == 6){
+      gameCompleted = true; //juego termina si pierde
+    }
+    if(gameCompleted){
+      statsCalculator(gameWon: gameWon);
+    }
     notifyListeners();
   }
   }
