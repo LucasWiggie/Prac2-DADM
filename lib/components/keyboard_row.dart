@@ -3,8 +3,8 @@ import 'package:prac2_dadm_grupo_d/constants/answer_stages.dart';
 import 'package:provider/provider.dart';
 
 import '../constants/colors.dart';
-import '../controller.dart';
 import '../data/keys_map.dart';
+import '../providers/controller.dart';
 
 class KeyboardRow extends StatelessWidget {
   const KeyboardRow({required this.min, required this.max,
@@ -55,7 +55,9 @@ class KeyboardRow extends StatelessWidget {
                             Provider.of<Controller>(context, listen: false)
                                 .setKeyTapped(value:e.key);
                           }, // InkWell hace un efecto al detectar un tap de la pantalla
-                          child: Center(child: Text(e.key, style:
+                          child: Center(child:
+                          e.key == 'BACK' ? const Icon(Icons.backspace_outlined) :
+                          Text(e.key, style:
                               Theme.of(context).textTheme.bodyText2?.copyWith(
                                 color: keyColor,
                               )

@@ -1,13 +1,15 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:prac2_dadm_grupo_d/pages/settings.dart';
 import 'package:provider/provider.dart';
 
 import '../components/grid.dart';
 import '../components/keyboard_row.dart';
+import '../components/stats_box.dart';
 import '../constants/words.dart';
-import '../controller.dart';
 import '../data/keys_map.dart';
+import '../providers/controller.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -40,6 +42,19 @@ class _HomePageState extends State<HomePage> {
         title: const Text('Wordle'),
         centerTitle: true,
         elevation: 0,
+        actions: [
+          IconButton(onPressed: (){
+            showDialog(context: context, builder: (_)=> StatsBox());
+          },
+          icon: Icon(Icons.bar_chart_outlined)),
+          IconButton(onPressed: (){
+            Navigator.of(context).push(MaterialPageRoute(builder: (context)
+            => Settings()
+            ));
+          },
+              icon: const Icon(Icons.settings)
+          )
+        ],
       ),
       body: Column(
         children: [

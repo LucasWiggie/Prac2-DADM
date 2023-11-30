@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:prac2_dadm_grupo_d/constants/colors.dart';
+import 'package:prac2_dadm_grupo_d/providers/controller.dart';
+import 'package:prac2_dadm_grupo_d/providers/theme_provider.dart';
+import 'package:prac2_dadm_grupo_d/themes/theme_preferences.dart';
+import 'package:prac2_dadm_grupo_d/themes/themes.dart';
 import 'package:provider/provider.dart';
 
-import 'controller.dart';
 import 'pages/home_page.dart';
+import 'pages/settings.dart';
 
 void main() {
   runApp(MultiProvider
     (providers: [
-      ChangeNotifierProvider(create: (_) => Controller())
+      ChangeNotifierProvider(create: (_) => Controller()),
+      ChangeNotifierProvider(create : (_) =>ThemeProvider()),
   ],
     child: const MyApp()));
 }
@@ -19,26 +24,27 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Wordle Grupo D',
-      theme: ThemeData( // configuración de colores y fuentes en la app
-        primaryColorLight: lightThemeLightShade,
-        primaryColorDark: lightThemeDarkShade,
-        appBarTheme: const AppBarTheme(
-          backgroundColor: Colors.white,
-          titleTextStyle: TextStyle(
-            color: Colors.black,
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          )
-        ),
-        scaffoldBackgroundColor: Colors.white,
-        textTheme: TextTheme().copyWith(
-          bodyText2: TextStyle(fontWeight: FontWeight.bold, color: Colors.black) // bodyText2 para cambiar la fuente por defecto
-        ),
-      ),
-      home: HomePage(),
+    return FutureBuilder(
+      initialData: false,
+      future: ThemePreferences.getTheme(),
+      builder: (context, snapshot) {
+        if(snapshot.hasData){
+          WidgetsBinding.instance?.addPostFrameCallback((timeStamp){
+            Provider.of<ThemeProvider>(context, listen:false).setTheme(turnOn:
+            snapshot.data as bool
+            );
+          });
+        }
+        return Consumer<ThemeProvider>(
+          builder: (_, notifier, __) =>
+              MaterialApp(
+                debugShowCheckedModeBanner: false,
+                title: 'Wordle Grupo D',
+                theme: notifier.isDark ? darkTheme : lightTheme,
+                home: const HomePage(),
+              ),
+        );
+      },
     );
   }
 }
