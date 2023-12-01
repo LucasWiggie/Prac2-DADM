@@ -19,12 +19,12 @@ class Tile extends StatefulWidget {
 }
 
 class _TileState extends State<Tile> with SingleTickerProviderStateMixin {
-  late AnimationController _animationController;
+  late AnimationController _animationController; //Controlador para las animaciones
 
   Color _backgroundColor = Colors.transparent;
   Color _borderColor = Colors.transparent; // color del borde del grid
   late AnswerStage _answerStage;
-  bool _animate = false;
+  bool _animate = false; //Variable que tiene el control de la animacion
 
   @override
   void initState() {
@@ -33,7 +33,7 @@ class _TileState extends State<Tile> with SingleTickerProviderStateMixin {
     });
 
     _animationController = AnimationController(
-        duration: Duration(milliseconds: 500),
+        duration: Duration(milliseconds: 500), //Duracion de la animacion
         vsync: this
     );
 
@@ -42,7 +42,7 @@ class _TileState extends State<Tile> with SingleTickerProviderStateMixin {
 
   @override
   void dispose(){
-    _animationController.dispose();
+    _animationController.dispose(); //Para cuando no necesitemos la animacion
     super.dispose();
   }
 
@@ -59,9 +59,9 @@ class _TileState extends State<Tile> with SingleTickerProviderStateMixin {
             _answerStage = notifier.tilesEntered[widget.index].answerStage; // utilizando notifier, guardamos el tipo de respuesta
 
             if(notifier.checkLine) {
-              final delay  = widget.index - (notifier.currentRow - 1) * 5;
+              final delay  = widget.index - (notifier.currentRow - 1) * 5; //Delay para que giren en efecto domino
               Future.delayed(Duration(milliseconds:300 * delay),(){
-                _animationController.forward();
+                _animationController.forward(); //Lanza la animacion
                 notifier.checkLine = false;
               });
 
@@ -82,28 +82,28 @@ class _TileState extends State<Tile> with SingleTickerProviderStateMixin {
                     .textTheme
                     .bodyMedium
                     ?.color ?? Colors.white;
-                _backgroundColor = Colors.transparent;
+                _backgroundColor = Colors.transparent; //Si esta en modo oscuro al escribir el fondo es transparente
               }
             }
 
-            return AnimatedBuilder(
+            return AnimatedBuilder( //Para que la animacion funcione se necesita un AnimatedBuilder
               animation: _animationController,
               builder:(_,child){
                 double flip = 0;
-                if(_animationController.value > 0.5){
+                if(_animationController.value > 0.5){ //Si la animacion va por la mitad cambia el valor de flip a pi
                   flip = pi;
                 }
                 return Transform(
                   alignment: Alignment.center,
-                    transform: Matrix4.identity()
-                    ..setEntry(3, 2, 0.003)
-                      ..rotateX(_animationController.value * pi)
-                        ..rotateX(flip),
+                    transform: Matrix4.identity() //Matrix4 te ayuda para realizar animaciones avanzadas
+                    ..setEntry(3, 2, 0.003) //.. Hace una secuencia de operaciones en el mismo objeto
+                      ..rotateX(_animationController.value * pi) //Multiplicas por pi para que gire
+                        ..rotateX(flip), //Para que las letras no se vean al reves al girar
                     child: Container(
                         decoration: BoxDecoration(
-                            color: flip > 0 ? _backgroundColor : Colors.transparent,
+                            color: flip > 0 ? _backgroundColor : Colors.transparent, //Para que no se coloree inmediatamente, sino cuando está girando
                             border: Border.all(
-                              color: flip > 0  ? Colors.transparent : _borderColor,
+                              color: flip > 0  ? Colors.transparent : _borderColor, //Para que el borde se ponga transparente cuando esta girando
                             )
                         ),
                         child: FittedBox(

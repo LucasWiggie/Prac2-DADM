@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../constants/colors.dart';
 
-final ThemeData lightTheme = ThemeData(
+final ThemeData lightTheme = ThemeData( //Configuración para el modo claro
     primaryColorLight: lightThemeLightShade,
     primaryColorDark: lightThemeDarkShade,
     appBarTheme: const AppBarTheme(
@@ -9,7 +9,7 @@ final ThemeData lightTheme = ThemeData(
           color: Colors.black,
         ),
         backgroundColor: Colors.white,
-        titleTextStyle: TextStyle(
+        titleTextStyle: TextStyle( //Variable de las letras
           color: Colors.black,
           fontSize: 20,
           fontWeight: FontWeight.bold,
@@ -23,12 +23,12 @@ final ThemeData lightTheme = ThemeData(
     ),
 );
 
-final ThemeData darkTheme = ThemeData(
+final ThemeData darkTheme = ThemeData( //Configuración para el modo oscuro
   primaryColorLight: darkThemeLightShade,
   primaryColorDark: darkThemeDarkShade,
   appBarTheme: const AppBarTheme(
       backgroundColor: Colors.black,
-      titleTextStyle: TextStyle(
+      titleTextStyle: TextStyle( //Variables de las letras
         color: Colors.white,
         fontSize: 20,
         fontWeight: FontWeight.bold,

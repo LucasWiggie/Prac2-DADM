@@ -5,7 +5,7 @@ import 'package:prac2_dadm_grupo_d/data/keys_map.dart';
 import '../models/tile_model.dart';
 
 class Controller extends ChangeNotifier {
-  bool checkLine = false, isBackOrEnter = false, gameWon = false;
+  bool checkLine = false, isBackOrEnter = false, gameWon = false; //Chequea la linea que esta siendo jugada
   String correctWord = "";
   int currentTile = 0; // lleva la cuenta de en qué casilla de la fila está el jugador
   int currentRow = 0; // lleva la cuenta de en qué fila está el jugador
@@ -56,7 +56,7 @@ class Controller extends ChangeNotifier {
       for (int i = currentRow * 5; i < (currentRow * 5) + 5; i++) {
         tilesEntered[i].answerStage = AnswerStage.correct;
         keysMap.update(tilesEntered[i].letter, (value) => AnswerStage.correct);
-        gameWon = true;
+        gameWon = true; //Activamos la variable de ganado
       }
     } else { // si no ha acertado
       // Comprobamos qué letras sí ha acertado en su casilla correcta

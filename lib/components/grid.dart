@@ -28,22 +28,22 @@ class Grid extends StatelessWidget {
               bool animate = false;
               bool animateDance = false;
               int danceDelay = 1600;
-              if(index == notifier.currentTile - 1 && !notifier.isBackOrEnter){
+              if(index == notifier.currentTile - 1 && !notifier.isBackOrEnter){ //Si el indice de la tile corresponde con la de la linea y no estas yendo hacia atras
                 animate = true;
               }
-              if(notifier.gameWon) {
+              if(notifier.gameWon) { //Si el jugador ha ganado
                 for (int i = notifier.tilesEntered.length - 5; i <
-                    notifier.tilesEntered.length; i++) {
+                    notifier.tilesEntered.length; i++) { //recorre la linea de tiles
                   if (index == i) {
-                    animateDance = true;
-                    danceDelay += 150 * (i-((notifier.currentRow - 1)*5));
+                    animateDance = true; //activa la animacion
+                    danceDelay += 150 * (i-((notifier.currentRow - 1)*5)); //crea un delay entre las diferentes tiles
                   }
                 }
               }
               return Dance(
                 delay:danceDelay,
                 animate: animateDance,
-                child: Bounce(
+                child: Bounce( //Realiza la animacion
                     animate: animate,
                     child: Tile(index: index,)),
               );

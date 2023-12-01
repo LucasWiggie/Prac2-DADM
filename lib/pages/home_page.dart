@@ -48,11 +48,11 @@ class _HomePageState extends State<HomePage> {
           },
           icon: Icon(Icons.bar_chart_outlined)),
           IconButton(onPressed: (){
-            Navigator.of(context).push(MaterialPageRoute(builder: (context)
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) //Cambia a la pantalla de ajustes
             => Settings()
             ));
           },
-              icon: const Icon(Icons.settings)
+              icon: const Icon(Icons.settings) //Crea el boton de ajustes
           )
         ],
       ),

@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
+    return FutureBuilder( //Cuando se tenga la data del modo el juego se ejecutará con esa información
       initialData: false,
       future: ThemePreferences.getTheme(),
       builder: (context, snapshot) {
@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
               MaterialApp(
                 debugShowCheckedModeBanner: false,
                 title: 'Wordle Grupo D',
-                theme: notifier.isDark ? darkTheme : lightTheme,
+                theme: notifier.isDark ? darkTheme : lightTheme, //Tiene en cuenta si esta en el modo oscuro o claro
                 home: const HomePage(),
               ),
         );
