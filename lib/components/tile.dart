@@ -19,21 +19,18 @@ class Tile extends StatefulWidget {
 }
 
 class _TileState extends State<Tile> with SingleTickerProviderStateMixin {
-  late AnimationController _animationController; //Controlador para las animaciones
+  late AnimationController _animationController;
 
   Color _backgroundColor = Colors.transparent;
   Color _borderColor = Colors.transparent; // color del borde del grid
   late AnswerStage _answerStage;
-  bool _animate = false; //Variable que tiene el control de la animacion
+  bool _animate = false;
 
   @override
   void initState() {
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
-      _borderColor = Theme.of(context).primaryColorLight;
-    });
 
     _animationController = AnimationController(
-        duration: Duration(milliseconds: 500), //Duracion de la animacion
+        duration: Duration(milliseconds: 500),
         vsync: this
     );
 
@@ -41,8 +38,14 @@ class _TileState extends State<Tile> with SingleTickerProviderStateMixin {
   }
 
   @override
+  void didChangeDependencies() {
+    _borderColor = Theme.of(context).primaryColorLight; //refresh
+    super.didChangeDependencies();
+  }
+
+  @override
   void dispose(){
-    _animationController.dispose(); //Para cuando no necesitemos la animacion
+    _animationController.dispose();
     super.dispose();
   }
 
@@ -59,9 +62,11 @@ class _TileState extends State<Tile> with SingleTickerProviderStateMixin {
             _answerStage = notifier.tilesEntered[widget.index].answerStage; // utilizando notifier, guardamos el tipo de respuesta
 
             if(notifier.checkLine) {
-              final delay  = widget.index - (notifier.currentRow - 1) * 5; //Delay para que giren en efecto domino
+              final delay  = widget.index - (notifier.currentRow - 1) * 5;
               Future.delayed(Duration(milliseconds:300 * delay),(){
-                _animationController.forward(); //Lanza la animacion
+                if(mounted) { //aniamcion no ejecuta si el state object no esta en el widget tree
+                  _animationController.forward();
+                }
                 notifier.checkLine = false;
               });
 
@@ -82,28 +87,28 @@ class _TileState extends State<Tile> with SingleTickerProviderStateMixin {
                     .textTheme
                     .bodyMedium
                     ?.color ?? Colors.white;
-                _backgroundColor = Colors.transparent; //Si esta en modo oscuro al escribir el fondo es transparente
+                _backgroundColor = Colors.transparent;
               }
             }
 
-            return AnimatedBuilder( //Para que la animacion funcione se necesita un AnimatedBuilder
+            return AnimatedBuilder(
               animation: _animationController,
               builder:(_,child){
                 double flip = 0;
-                if(_animationController.value > 0.5){ //Si la animacion va por la mitad cambia el valor de flip a pi
+                if(_animationController.value > 0.5){
                   flip = pi;
                 }
                 return Transform(
                   alignment: Alignment.center,
-                    transform: Matrix4.identity() //Matrix4 te ayuda para realizar animaciones avanzadas
-                    ..setEntry(3, 2, 0.003) //.. Hace una secuencia de operaciones en el mismo objeto
-                      ..rotateX(_animationController.value * pi) //Multiplicas por pi para que gire
-                        ..rotateX(flip), //Para que las letras no se vean al reves al girar
+                    transform: Matrix4.identity()
+                    ..setEntry(3, 2, 0.003)
+                      ..rotateX(_animationController.value * pi)
+                        ..rotateX(flip),
                     child: Container(
                         decoration: BoxDecoration(
-                            color: flip > 0 ? _backgroundColor : Colors.transparent, //Para que no se coloree inmediatamente, sino cuando está girando
+                            color: flip > 0 ? _backgroundColor : Colors.transparent,
                             border: Border.all(
-                              color: flip > 0  ? Colors.transparent : _borderColor, //Para que el borde se ponga transparente cuando esta girando
+                              color: flip > 0  ? Colors.transparent : _borderColor,
                             )
                         ),
                         child: FittedBox(
