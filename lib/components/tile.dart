@@ -64,7 +64,9 @@ class _TileState extends State<Tile> with SingleTickerProviderStateMixin {
             if(notifier.checkLine) {
               final delay  = widget.index - (notifier.currentRow - 1) * 5;
               Future.delayed(Duration(milliseconds:300 * delay),(){
-                _animationController.forward();
+                if(mounted) { //aniamcion no ejecuta si el state object no esta en el widget tree
+                  _animationController.forward();
+                }
                 notifier.checkLine = false;
               });
 

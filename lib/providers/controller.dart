@@ -7,7 +7,8 @@ import '../models/tile_model.dart';
 import '../stats_calculator.dart';
 
 class Controller extends ChangeNotifier {
-  bool checkLine = false, isBackOrEnter = false, gameWon = false, gameCompleted = false;
+  bool checkLine = false, isBackOrEnter = false, gameWon = false, gameCompleted = false,
+  notEnoughLetters = false;
   String correctWord = "";
   int currentTile = 0; // lleva la cuenta de en qué casilla de la fila está el jugador
   int currentRow = 0; // lleva la cuenta de en qué fila está el jugador
@@ -20,14 +21,18 @@ class Controller extends ChangeNotifier {
       if(currentTile == 5 * (currentRow + 1)){
         isBackOrEnter = true;
         checkWord(); // comprobamos si la palabra que ha metido el usuario es correcta
+      }else{ //si no hay suficientes letras
+        notEnoughLetters = true;
       }
     } else if (value == 'BACK') {
+      notEnoughLetters = false;
       if(currentTile > 5 * (currentRow + 1) - 5){
         currentTile--;
         tilesEntered.removeLast();
         isBackOrEnter = true;
       }
     } else {
+      notEnoughLetters = false;
       if(currentTile < 5 * (currentRow + 1)){
         tilesEntered.add(TileModel(letter: value, answerStage: AnswerStage.notAnswered));
         currentTile++;
@@ -101,8 +106,12 @@ class Controller extends ChangeNotifier {
     for (int i = currentRow * 5; i < (currentRow * 5) + 5; i++) {
       if (tilesEntered[i].answerStage == AnswerStage.notAnswered) {
         tilesEntered[i].answerStage = AnswerStage.incorrect;
-        keysMap.update(
-            tilesEntered[i].letter, (value) => AnswerStage.incorrect);
+        final results = keysMap.entries.where((element) =>
+        element.key == tilesEntered[i].letter); //cogemos las keys que pueden querer actualizarse
+        if (results.single.value == AnswerStage.notAnswered) { //comprobar que answerStage no se ha actualizado ya, si ya es correcta o existe no se puede reescribir
+          keysMap.update(
+              tilesEntered[i].letter, (value) => AnswerStage.incorrect);
+        }
       }
     }
   }

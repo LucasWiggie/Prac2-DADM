@@ -27,10 +27,10 @@ class _DanceState extends State<Dance> with SingleTickerProviderStateMixin{
         vsync: this);
     _animation = TweenSequence<Offset>(
       [
-        TweenSequenceItem(tween: Tween(begin:Offset(0,0),end:Offset(0,-0.8)), weight: 15),
-        TweenSequenceItem(tween: Tween(begin:Offset(0,-0.80),end:Offset(0,0.0)), weight: 10),
-        TweenSequenceItem(tween: Tween(begin:Offset(0,0),end:Offset(0,-0.3)), weight: 12),
-        TweenSequenceItem(tween: Tween(begin:Offset(0,-0.30),end:Offset(0,0.0)), weight: 8),
+        TweenSequenceItem(tween: Tween(begin:const Offset(0,0),end:const Offset(0,-0.8)), weight: 15),
+        TweenSequenceItem(tween: Tween(begin:const Offset(0,-0.80),end:const Offset(0,0.0)), weight: 10),
+        TweenSequenceItem(tween: Tween(begin:const Offset(0,0),end:const Offset(0,-0.3)), weight: 12),
+        TweenSequenceItem(tween: Tween(begin:const Offset(0,-0.30),end:const Offset(0,0.0)), weight: 8),
 
       ]
     ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOutSine));
@@ -48,7 +48,9 @@ class _DanceState extends State<Dance> with SingleTickerProviderStateMixin{
   void didUpdateWidget(covariant Dance oldWidget) {
     if(widget.animate){
       Future.delayed(Duration(milliseconds:widget.delay),(){
-        _controller.forward();
+        if(mounted) { //aniamción solo ejecuta si el state object esta en el widget tree
+          _controller.forward();
+        }
       });
 
     }

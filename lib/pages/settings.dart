@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:prac2_dadm_grupo_d/utils/quick_box.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -12,13 +13,13 @@ class Settings extends StatelessWidget {
   Widget build(BuildContext context){
     return Scaffold(
       appBar: AppBar(
-        title: Text('Ajustes'),
+        title: const Text('Ajustes'),
         centerTitle: true,
         elevation: 0,
         actions: [
           IconButton(onPressed:(){
             Navigator.maybePop(context);
-          }, icon: Icon(Icons.clear))
+          }, icon: const Icon(Icons.clear))
         ],
       ),
       body: Column(
@@ -28,7 +29,7 @@ class Settings extends StatelessWidget {
                 bool _isSwitched = false;
                 _isSwitched = notifier.isDark;
                 return SwitchListTile(
-                    title: Text("Modo Oscuro"),
+                    title: const Text("Modo Oscuro"),
                     value: _isSwitched,
                     onChanged: (value){
                   _isSwitched = value;
@@ -38,14 +39,14 @@ class Settings extends StatelessWidget {
               },
           ),
           ListTile( //para poder reiniciar las estadisticas
-            leading: Text("Borrar Datos"
+            title: const Text("Borrar Datos",
             ),
             onTap: () async {
               final prefs = await SharedPreferences.getInstance();
               prefs.remove("stats"); //leer los datos y borrar las estadisticas
               prefs.remove("chart"); //borrar datos de la grafica
               prefs.remove("row");//borrar fila actual
-              showDialog(context: context, builder: (context) => AlertDialog(title: Text("Estadísticas borradas", textAlign: TextAlign.center,),)); //texto de borrado
+                  runQuickBox(context: context, message: "Datos borrados");
             }
           )
         ]

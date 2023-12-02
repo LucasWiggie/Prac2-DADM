@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:prac2_dadm_grupo_d/components/stats_chart.dart';
 import 'package:prac2_dadm_grupo_d/components/stats_tile.dart';
 import 'package:prac2_dadm_grupo_d/constants/answer_stages.dart';
 import 'package:prac2_dadm_grupo_d/data/keys_map.dart';
@@ -25,9 +26,9 @@ class StatsBox extends StatelessWidget {
               alignment: Alignment.centerRight,
               onPressed: () {
                 Navigator.maybePop(context); //salir de la pantalla de estadisticas al pulsar "x"
-              }, icon: Icon(
+              }, icon: const Icon(
               Icons.clear)),
-          Expanded(child: Text('ESTADISTICAS', textAlign: TextAlign.center,)),
+          const Expanded(child: Text('ESTADISTICAS', textAlign: TextAlign.center,)),
           //muestra de datos
           Expanded(
             flex: 2,
@@ -50,67 +51,9 @@ class StatsBox extends StatelessWidget {
               },
             ), //fila para los datos
           ),
-          Expanded( //crecaion de la gráfica
+          const Expanded( //crecaion de la gráfica
             flex: 8,
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(12, 16, 12, 16),
-              child: FutureBuilder(
-                  future: getSeries(),
-                  builder: (context, snapshot) {
-                    final List<charts.Series<ChartModel,String>> series;//lista de series
-                    if(snapshot.hasData){//comprobar si future devuelve info
-                      series = snapshot.data as List<charts.Series<ChartModel,String>>;
-                      return Consumer<ThemeProvider>(
-                        builder: (_,notifier, __) {
-                          var color;
-                          if(notifier.isDark){ //titulo en blanco si modo oscuro
-                            color = charts.MaterialPalette.white;
-                          }else{ //si no en negro
-                            color = charts.MaterialPalette.black;
-                          }
-                          return charts.BarChart(
-                          series,
-                          vertical: false,
-                          animate: false,
-                          domainAxis: charts.OrdinalAxisSpec(
-                            renderSpec: charts.SmallTickRendererSpec(
-                              lineStyle: charts.LineStyleSpec(
-                                color: charts.MaterialPalette.transparent, //quitar linea lateral
-                              ),
-                              labelStyle: charts.TextStyleSpec(
-                                fontSize: 16, //tamaño numeros laterales
-                                color: color,
-                              )
-                            ),
-                          ),
-                          primaryMeasureAxis: const charts.NumericAxisSpec(
-                            renderSpec: charts.GridlineRendererSpec(
-                              lineStyle: charts.LineStyleSpec(
-                                color: charts.MaterialPalette.transparent, //quitar lineas interiores
-                              ),
-                              labelStyle: charts.TextStyleSpec(
-                                color: charts.MaterialPalette.transparent, //quitar numeración inferior
-                              )
-                            )
-                          ),
-                          barRendererDecorator: charts.BarLabelDecorator(
-                            labelAnchor: charts.BarLabelAnchor.end, //poner la puntuación de cada barra al final de estas
-                            outsideLabelStyleSpec: charts.TextStyleSpec(
-                              color:color,
-                            )
-                          ),
-                          behaviors: [
-                            charts.ChartTitle("ACIERTOS POR FILA")
-                          ],
-                        );
-                        },
-                      );//devolver la barra de grafica con series
-                    }else{
-                      return SizedBox(); //si no hay datos
-                    }
-
-                  }),
-            ),
+            child: StatsChart(), //stats de la grafica
           ),
           Expanded(
               flex: 2,
@@ -122,10 +65,10 @@ class StatsBox extends StatelessWidget {
               onPressed: (){ //para jugar otra partida
                 keysMap.updateAll((key, value) => value = AnswerStage.notAnswered); //resetear los valores de las teclas
                 Navigator.pushAndRemoveUntil(context,
-                    MaterialPageRoute(builder: (context)=> MyApp()),
+                    MaterialPageRoute(builder: (context)=> const MyApp()),
                         (route) => false);
               },//mete una nueva ruta y elimina las anteriores
-              child: Text("Replay", style: TextStyle(
+              child: const Text("Replay", style: TextStyle(
                 fontSize: 40,
               ),))
           )
@@ -134,5 +77,7 @@ class StatsBox extends StatelessWidget {
     );
   }
 }
+
+
 
 
