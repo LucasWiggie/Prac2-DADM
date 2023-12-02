@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:prac2_dadm_grupo_d/constants/answer_stages.dart';
 import 'package:prac2_dadm_grupo_d/data/keys_map.dart';
+import 'package:prac2_dadm_grupo_d/utils/calculate_chart_stats.dart';
 
 import '../models/tile_model.dart';
 import '../stats_calculator.dart';
@@ -111,7 +112,10 @@ class Controller extends ChangeNotifier {
       gameCompleted = true; //juego termina si pierde
     }
     if(gameCompleted){
-      statsCalculator(gameWon: gameWon);
+      statsCalculator(gameWon: gameWon); //calculamos estadisticas
+      if(gameWon) {
+        setChartStats(actualRow: currentRow); //estadisticas para la gráfica
+      }
     }
     notifyListeners();
   }
