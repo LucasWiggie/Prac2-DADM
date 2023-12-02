@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'colors.dart';
+import '../constants/colors.dart';
 
 final ThemeData lightTheme = ThemeData( //Configuración para el modo claro
     primaryColorLight: lightThemeLightShade,
