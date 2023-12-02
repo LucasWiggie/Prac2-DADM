@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:prac2_dadm_grupo_d/pages/settings.dart';
+import 'package:prac2_dadm_grupo_d/utils/quick_box.dart';
 import 'package:provider/provider.dart';
 
 import '../components/grid.dart';
@@ -43,10 +44,36 @@ class _HomePageState extends State<HomePage> {
         centerTitle: true,
         elevation: 0,
         actions: [
-          IconButton(onPressed: (){
-            showDialog(context: context, builder: (_)=> StatsBox());
-          },
-          icon: Icon(Icons.bar_chart_outlined)),
+          Consumer<Controller>(
+            builder: (_,notifier, __){
+              if(notifier.notEnoughLetters){ //si faltan letras se saca un mensaje
+                runQuickBox(context: context, message: "Faltan letras");
+              }
+              if (notifier.gameCompleted) {
+                if (notifier.gameWon) {
+                  if (notifier.currentRow == 6) { //si gana en el ultimo intento
+                    runQuickBox(context: context, message: 'Por los pelos');
+                  } else {
+                    runQuickBox(context: context, message: '¡Genial!');
+                  }
+                } else { //si no se ha ganado
+                  runQuickBox(context: context, message: notifier.correctWord);
+                }
+                Future.delayed(
+                  const Duration(milliseconds: 4000),(){
+                    if (mounted){
+                      showDialog(context: context, builder: (_)=> const StatsBox());
+                  }
+                 },
+                );
+              }
+
+              return IconButton(onPressed: () async{
+                showDialog(context: context, builder: (_)=> StatsBox());
+                },
+                icon: Icon(Icons.bar_chart_outlined));
+              },
+          ),
           IconButton(onPressed: (){
             Navigator.of(context).push(MaterialPageRoute(builder: (context) //Cambia a la pantalla de ajustes
             => Settings()
