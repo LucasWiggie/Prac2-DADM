@@ -1,5 +1,6 @@
 import 'package:prac2_dadm_grupo_d/constants/answer_stages.dart';
 
+// Mapa de cada letras con su estado
 Map<String, AnswerStage> keysMap = {
   'Q' : AnswerStage.notAnswered,
   'W' : AnswerStage.notAnswered,

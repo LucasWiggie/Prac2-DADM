@@ -1,3 +1,5 @@
+
+// Lista de posibles soluciones
 const List<String> words = [
   'PIZZA',
   "ABEJA",
