@@ -19,14 +19,14 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MultiProvider
+    return MultiProvider // Cuando se tenga la data del modo el juego se ejecutará con esa información
     (providers: [
-        ChangeNotifierProvider(create: (_) => Controller()),
-    ChangeNotifierProvider(create : (_) =>ThemeProvider()),
+        ChangeNotifierProvider(create: (_) => Controller()), // proveedor para el controlador
+        ChangeNotifierProvider(create : (_) =>ThemeProvider()), // proveedor para el proveedor de temas
     ],
-      child: FutureBuilder(
+      child: FutureBuilder( // widget that provides management of future builds (async operations)
         initialData: false,
-        future: ThemePreferences.getTheme(),
+        future: ThemePreferences.getTheme(), // Obtiene el tema almacenado en las preferencias
         builder: (context, snapshot) {
           if(snapshot.hasData){
             WidgetsBinding.instance?.addPostFrameCallback((timeStamp){
@@ -35,12 +35,15 @@ class MyApp extends StatelessWidget {
               );
             });
           }
+
+          // Después de obtener el tema del futuro, se utiliza Consumer<ThemeProvider> para reconstruir la interfaz de
+          // usuario con el tema adecuado (oscuro o claro) según las preferencias almacenadas
           return Consumer<ThemeProvider>(
             builder: (_, notifier, __) =>
-                MaterialApp(
+                MaterialApp( // El widget principal que define la estructura básica de la aplicación.
                   debugShowCheckedModeBanner: false,
                   title: 'Wordle Grupo D',
-                  theme: notifier.isDark ? darkTheme : lightTheme,
+                  theme: notifier.isDark ? darkTheme : lightTheme, // Tiene en cuenta si esta en el modo oscuro o claro
                   home: const HomePage(),
                 ),
           );

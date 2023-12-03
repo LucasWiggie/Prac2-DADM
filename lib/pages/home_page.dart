@@ -12,69 +12,71 @@ import '../constants/words.dart';
 import '../data/keys_map.dart';
 import '../providers/controller.dart';
 
-class HomePage extends StatefulWidget {
+class HomePage extends StatefulWidget { // pantalla principal de la aplicación
   const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> { // lógica de la pantalla principal
 
   late String _word;
 
   @override
-  void initState(){
+  void initState(){ // al iniciar la pantalla principal
     final r = Random().nextInt(words.length); // selecciona una palabra aleatoria del archivo con lista de palabras
     _word = words[r];
 
     // Pasamos la información de la palabra seleccionada al controlador
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp){
-      Provider.of<Controller>(context, listen: false)
-          .setCorrectWord(word: _word);
+      Provider.of<Controller>(context, listen: false) // se pasa la palabra seleccionada al controlador
+          .setCorrectWord(word: _word); // se establece la palabra solución en el controlador
     });
     super.initState();
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Wordle'),
+  Widget build(BuildContext context) { // construye la GUI de la pantalla principal
+    return Scaffold( // definimos la estructura básica con Scaffold
+      appBar: AppBar( // barra superior de la aplicación
+        title: const Text('Wordle'), // título
         centerTitle: true,
         elevation: 0,
         actions: [
+          // Consumer escucha los cambios en el objeto Controller y reconstruye
+          // parte del widget hijo cuando detecta un cambio
           Consumer<Controller>(
-            builder: (_,notifier, __){
+            builder: (_,notifier, __){ // se ejecutará cada vez que el Controller cambie
               if(notifier.notEnoughLetters){ //si faltan letras se saca un mensaje
                 runQuickBox(context: context, message: "Faltan letras");
               }
-              if (notifier.gameCompleted) {
+              if (notifier.gameCompleted) { // si se ha completado la partida
                 if (notifier.gameWon) {
                   if (notifier.currentRow == 6) { //si gana en el ultimo intento
                     runQuickBox(context: context, message: 'Por los pelos');
-                  } else {
+                  } else { // si gana antes del último intento
                     runQuickBox(context: context, message: '¡Genial!');
                   }
                 } else { //si no se ha ganado
-                  runQuickBox(context: context, message: notifier.correctWord);
+                  runQuickBox(context: context, message: notifier.correctWord); // te muestra con un QuickBox la palabra solución
                 }
-                Future.delayed(
+                Future.delayed( // Corrutina que te enseña la pantalla de estadística tras 4 segundos
                   const Duration(milliseconds: 4000),(){
-                    if (mounted){
+                    if (mounted){ // solo se ejecuta si pertenece al widget tree
                       showDialog(context: context, builder: (_)=> const StatsBox());
                   }
                  },
                 );
               }
 
-              return IconButton(onPressed: () async{
+              return IconButton(onPressed: () async{ // muestra un icono para las estadísticas
                 showDialog(context: context, builder: (_)=> StatsBox());
                 },
                 icon: Icon(Icons.bar_chart_outlined));
               },
           ),
-          IconButton(onPressed: (){
+          IconButton(onPressed: (){ // muestra el botón de ajustes
             Navigator.of(context).push(MaterialPageRoute(builder: (context) //Cambia a la pantalla de ajustes
             => Settings()
             ));
@@ -83,7 +85,7 @@ class _HomePageState extends State<HomePage> {
           )
         ],
       ),
-      body: Column(
+      body: Column( // cuerpo de la pantalla principal, donde estará la cuadrícula y el teclado
         children: [
           const Divider(
             height: 1,

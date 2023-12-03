@@ -1,3 +1,4 @@
+// Estadísticas
 class ChartModel{
 
   final int score; //cuantas veces se ha acertado en esa fila
