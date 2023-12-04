@@ -59,7 +59,7 @@ class _HomePageState extends State<HomePage> { // lógica de la pantalla princip
                     runQuickBox(context: context, message: '¡Genial!');
                   }
                 } else { //si no se ha ganado
-                  runQuickBox(context: context, message: notifier.correctWord); // te muestra con un QuickBox la palabra solución
+                  runQuickBox(context: context, message: 'La solución era: ' + notifier.correctWord); // te muestra con un QuickBox la palabra solución
                 }
                 Future.delayed( // Corrutina que te enseña la pantalla de estadística tras 4 segundos
                   const Duration(milliseconds: 4000),(){

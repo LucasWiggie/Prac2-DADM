@@ -96,7 +96,7 @@ class _TileState extends State<Tile> with SingleTickerProviderStateMixin {
               }
             }
 
-            return AnimatedBuilder( // controla la animación de la rotaciçon de la casilla
+            return AnimatedBuilder( // controla la animación de la rotacion de la casilla
               animation: _animationController,
               builder:(_,child){
                 double flip = 0; // si flip es mayor que 0, la casilla está girada
